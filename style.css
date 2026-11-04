@@ -1,0 +1,333 @@
+/* ---------- COLOUR TOKENS: change these to re-theme the whole page ---------- */
+:root {
+  --sidebar-bg: #351D2B;
+  --sidebar-text: #FFF8F6;
+  --page-bg: #e36394;
+  --card-bg: #FFFAF8;
+  --text: #33232C;
+  --muted: #826D78;
+  --accent: #B65C79;
+  --accent-dark: #873C58;
+  --border: #E8DCE1;
+  --radius: 18px;
+  --sidebar-w: 260px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--page-bg);
+  line-height: 1.6;
+}
+
+/* Ambient glow: two slow blurred blobs drifting behind the page */
+body::before, body::after {
+  content: ""; position: fixed; z-index: 0; pointer-events: none;
+  width: 46vmax; height: 46vmax; border-radius: 50%; filter: blur(70px); opacity: .45;
+}
+body::before { background: #ff9ec2; top: -15vmax; left: -10vmax; animation: drift1 24s ease-in-out infinite alternate; }
+body::after  { background: #b8397a; bottom: -18vmax; right: -12vmax; animation: drift2 28s ease-in-out infinite alternate; }
+@keyframes drift1 { to { transform: translate(18vmax, 12vmax) scale(1.15); } }
+@keyframes drift2 { to { transform: translate(-16vmax, -10vmax) scale(1.1); } }
+
+/* ---------- LAYOUT SHELL ---------- */
+.shell {
+  position: relative; z-index: 1;
+  display: flex;
+  min-height: 100vh;
+  padding: 24px;
+  gap: 24px;
+}
+
+.sidebar {
+  flex: 0 0 var(--sidebar-w);
+  position: sticky;
+  top: 24px;
+  align-self: flex-start;
+  height: calc(100vh - 48px);
+  background: linear-gradient(170deg, #402338, #2b1623);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  padding: 40px 32px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.15);
+}
+.sidebar nav { display: flex; flex-direction: column; gap: 6px; }
+.sidebar a {
+  position: relative; overflow: hidden;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 10px 14px;
+  border-radius: 10px;
+  opacity: .8;
+  transition: background .2s, opacity .2s, transform .12s;
+}
+.sidebar a:hover { opacity: 1; background: rgba(255,255,255,.12); }
+.sidebar a:active { transform: scale(.96); }
+.sidebar a.active {
+  opacity: 1; background: rgba(255,255,255,.2); font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--page-bg);
+}
+.sidebar nav a:hover { transform: translateX(4px); }
+.sidebar nav a:active { transform: translateX(4px) scale(.96); }
+.sidebar a:focus-visible, .btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+.content {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ---------- SECTIONS ---------- */
+section {
+  display: none;               /* only the active screen is shown */
+  min-height: calc(100vh - 48px);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 48px clamp(20px, 5vw, 64px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+section.active { display: block; animation: screenIn .35s ease both; }
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+section > h2 {
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+/* ---------- HOME / PROFILE ---------- */
+#home.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 14px;
+}
+.avatar {
+  position: relative; overflow: hidden;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: linear-gradient(135deg, var(--accent), var(--page-bg));
+  border: 6px solid var(--border);
+  box-shadow: 0 0 0 10px rgba(182,92,121,.12), 0 18px 40px rgba(182,92,121,.3);
+  animation: float 7s ease-in-out infinite;
+  transition: transform .2s, box-shadow .3s;
+}
+.avatar:hover { transform: scale(1.04) rotate(-2deg); }
+.avatar:active { transform: scale(.94); }
+@keyframes float { 50% { translate: 0 -8px; } }
+
+#home h1 { font-size: clamp(2rem, 5vw, 3rem); color: var(--accent); font-weight: 600; }
+.role { font-size: 1.25rem; color: var(--accent); }
+.bio { max-width: 560px; color: var(--muted); font-size: .98rem; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 6px; }
+.links a {
+  position: relative; overflow: hidden;
+  text-decoration: none;
+  color: #fff;
+  background: var(--sidebar-bg);
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: .9rem;
+  transition: background .2s, transform .15s, box-shadow .2s;
+}
+.links a:hover { background: var(--accent-dark); transform: translateY(-3px); box-shadow: 0 8px 18px rgba(53,29,43,.25); }
+.links a:active { transform: scale(.93); box-shadow: none; }
+
+/* One entrance moment on first load (class is removed by script.js) */
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+.intro #home > * { animation: rise .6s cubic-bezier(.2,.7,.2,1) backwards; }
+.intro #home > :nth-child(2) { animation-delay: .08s; }
+.intro #home > :nth-child(3) { animation-delay: .16s; }
+.intro #home > :nth-child(4) { animation-delay: .24s; }
+.intro #home > :nth-child(5) { animation-delay: .32s; }
+.intro #home > .avatar { animation: rise .7s cubic-bezier(.2,.7,.2,1) backwards, float 7s ease-in-out infinite; }
+
+/* ---------- ENTRY LIST (shared by games, docs, music) ---------- */
+.entries { display: flex; flex-direction: column; gap: 28px; max-width: 760px; margin: 0 auto; }
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+  transition: transform .2s, padding .2s;
+}
+.entry:last-child { border-bottom: 0; padding-bottom: 0; }
+.entry:hover { transform: translateX(4px); }
+.entry h3 { font-size: 1.25rem; font-weight: 600; }
+.entry p { color: var(--muted); margin-bottom: 8px; }
+
+/* Track that's currently playing */
+.entry.playing { box-shadow: inset 3px 0 0 var(--accent); padding-left: 14px; }
+.entry.playing h3 { color: var(--accent); }
+.entry.playing h3::before { content: "♪ "; }
+
+/* itch.io embed: widget is 552 x 167, scales down on small screens */
+.title-link { color: inherit; text-decoration: none; }
+.title-link:hover { color: var(--accent-dark); text-decoration: underline; }
+.embed { width: 100%; max-width: 552px; }
+.embed iframe { display: block; width: 100%; height: 167px; border: 0; border-radius: 10px; }
+
+.btn {
+  position: relative; overflow: hidden;
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 8px;
+  text-decoration: none;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: .95rem;
+  transition: background .2s, transform .12s, box-shadow .2s;
+}
+.btn:hover { background: var(--accent-dark); box-shadow: 0 6px 16px rgba(135,60,88,.35); }
+.btn:active { transform: scale(.95); box-shadow: none; }
+
+audio { width: 100%; max-width: 552px; }
+
+/* SoundCloud links under each track */
+.sc-link {
+  align-self: flex-start; margin-top: 4px;
+  color: var(--accent-dark); font-weight: 600; font-size: .9rem; text-decoration: none;
+}
+.sc-link:hover { text-decoration: underline; }
+.sc-soon { color: var(--muted); font-size: .9rem; font-style: italic; margin-top: 4px; }
+
+/* ---------- CLICK RIPPLE (spawned by script.js) ---------- */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.45);
+  transform: scale(0);
+  animation: ripple .55s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes ripple { to { transform: scale(1); opacity: 0; } }
+
+/* ---------- SIDEBAR MUSIC PLAYER ---------- */
+.player {
+  position: absolute;               /* pinned to the bottom of the sidebar */
+  left: 14px; right: 14px; bottom: 14px;
+  padding: 24px 10px 10px;
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 10px 24px rgba(0,0,0,.25);
+  color: var(--sidebar-text);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.player svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* title row */
+.player-top { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
+.player-info { flex: 1; min-width: 0; }
+.player-sub { font-size: .75rem; opacity: .6; line-height: 1.2; }
+.player-title {
+  font-weight: 700; font-size: 1.05rem; line-height: 1.25;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* SoundCloud icon (overrides the generic ".sidebar a" nav-link styling) */
+.sidebar .player-sc {
+  flex: none; width: 32px; height: 32px; padding: 0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: .75;
+}
+.sidebar .player-sc:hover { opacity: 1; background: #ff5500; }
+
+/* sliders: seek bar + volume share the same look */
+.player-bar { display: flex; align-items: center; gap: 8px; padding: 0 4px; font-size: .72rem; opacity: .9; font-variant-numeric: tabular-nums; }
+.player input[type=range] {
+  flex: 1; min-width: 0; height: 14px; padding: 5px 0; border-radius: 99px; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+  background: linear-gradient(to right, #fff var(--p, 0%), rgba(255,255,255,.22) var(--p, 0%));
+  background-clip: content-box;
+}
+.player input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%;
+  background: #fff; opacity: 0; transition: opacity .15s;
+}
+.player-bar:hover input[type=range]::-webkit-slider-thumb,
+.player-vol:hover input[type=range]::-webkit-slider-thumb { opacity: 1; }
+.player input[type=range]::-moz-range-thumb {
+  width: 12px; height: 12px; border: 0; border-radius: 50%; background: #fff;
+}
+
+/* square keys: volume / previous / play / next */
+.player-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.key {
+  height: 44px; border: 1px solid rgba(255,255,255,.07); border-radius: 14px; cursor: pointer;
+  color: var(--sidebar-text);
+  background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 4px 10px rgba(0,0,0,.28);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .12s, background .2s, box-shadow .12s, filter .2s;
+}
+.key:hover { background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.08)); }
+.key:active { transform: translateY(1px) scale(.96); box-shadow: inset 0 2px 6px rgba(0,0,0,.35); }
+.key.play { background: linear-gradient(135deg, var(--accent), var(--page-bg)); border-color: transparent; color: #fff; }
+.key.play:hover { filter: brightness(1.1); }
+.key.play svg { width: 20px; height: 20px; }
+
+/* volume slider: hidden by default, slides open when the player is hovered or keyboard-focused */
+.player-vol {
+  display: flex; padding: 0 4px;
+  max-height: 0; margin-top: -10px; opacity: 0; pointer-events: none;
+  transition: max-height .3s ease, margin-top .3s ease, opacity .25s ease;
+}
+.player:hover .player-vol,
+.player:has(:focus-visible) .player-vol {
+  max-height: 14px; margin-top: 0; opacity: 1; pointer-events: auto;
+}
+
+.player button:focus-visible, .player-sc:focus-visible, .player input:focus-visible {
+  outline: 3px solid #fff; outline-offset: 2px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+/* Short windows: player flows under the nav instead of overlapping it */
+@media (min-width: 801px) and (max-height: 600px) {
+  .sidebar { overflow-y: auto; }
+  .player { position: static; margin: 16px -18px 0; }
+}
+
+/* Phones: sidebar becomes a top bar, player a compact bar fixed to the bottom */
+@media (max-width: 800px) {
+  .shell { flex-direction: column; padding: 12px; gap: 12px; }
+  .sidebar {
+    position: sticky; top: 12px; z-index: 10;
+    flex: none; height: auto; width: 100%;
+    padding: 10px;
+  }
+  .sidebar nav { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 4px; }
+  .sidebar a { font-size: .95rem; padding: 8px 12px; }
+  section { min-height: calc(100vh - 140px); }
+
+  .player {
+    position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 20;
+    flex-direction: row; align-items: center; padding: 10px 12px;
+    background: var(--sidebar-bg); box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  }
+  .player-top { flex: 1; min-width: 0; }
+  .player-bar, .player-vol, #pMute { display: none; }
+  .player-sub { display: none; }
+  .player-controls { display: flex; gap: 6px; }
+  .key { width: 40px; height: 40px; }
+  .content { padding-bottom: 84px; }   /* so the bar never covers content */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samarth | Portfolio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="shell">
+
+  <aside class="sidebar">
+    <nav>
+      <a href="#home" class="active">Home</a>
+      <a href="#games">Games</a>
+      <a href="#docs">Game Design Docs</a>
+      <a href="#music">Music</a>
+    </nav>
+
+    <!-- MUSIC PLAYER (controls the <audio> tags in the Music section) -->
+    <div class="player" id="player" aria-label="Music player">
+      <div class="player-top">
+        <div class="player-info">
+          <div class="player-sub">Samarth Ale</div>
+          <div class="player-title" id="pTitle">Pick a track</div>
+        </div>
+        <a class="player-sc" id="pSC" href="https://soundcloud.com/samarth-ale" target="_blank" rel="noopener" aria-label="Open on SoundCloud" title="Open on SoundCloud">
+          <svg viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1-.6-7.96A6 6 0 0 1 18 9.5a4.25 4.25 0 0 1-.25 8.5H7z"/></svg>
+        </a>
+      </div>
+
+      <div class="player-bar">
+        <span id="pCur">0:00</span>
+        <input type="range" id="pSeek" min="0" max="100" value="0" step="0.1" aria-label="Seek">
+        <span id="pDur">0:00</span>
+      </div>
+
+      <div class="player-controls">
+        <button class="key" id="pMute" aria-label="Mute"></button>
+        <button class="key" id="pPrev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM20 6v12L9.5 12z"/></svg></button>
+        <button class="key play" id="pPlay" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        <button class="key" id="pNext" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM4 6v12l10.5-6z"/></svg></button>
+      </div>
+
+      <div class="player-vol">
+        <input type="range" id="pVol" min="0" max="100" value="80" aria-label="Volume">
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <!-- HOME -->
+    <section id="home">
+      <img class="avatar" src="PFP.jpg" alt="Samarth">
+      <h1>Samarth Ale</h1>
+      <p class="role">Game Developer &amp; Designer</p>
+      <p class="bio">Replace this with two or three lines about you: what you build, the tools you use, and what you're looking for.</p>
+      <div class="links">
+        <a href="https://aleias.itch.io/" target="_blank" rel="noopener">itch.io</a>
+        <a href="https://github.com/Ale1as" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/samarthale" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="docs/CV.pdf" target="_blank" rel="noopener">CV</a>
+      </div>
+    </section>
+
+    <!-- GAMES -->
+    <section id="games">
+      <h2>Games</h2>
+      <div class="entries">
+
+        <article class="entry">
+          <h3><a class="title-link" href="https://aleias.itch.io/exorcist" target="_blank" rel="noopener">Exorcist</a></h3>
+          <p>You play as a nun with two personalities. One night, A church is attacked by demonic forces seeking to corrupt the holy site and the souls of the faithful. The nun holding two personalities, one of a holy spirited nun, but the other with the demonic spirit of satan, you try to cleanse the church with both HOLY and UNHOLY.</p>
+          <div class="embed"><iframe src="https://itch.io/embed/3898205?dark=true" title="Exorcist on itch.io"><a href="https://aleias.itch.io/exorcist">Exorcist by Aleias</a></iframe></div>
+        </article>
+
+        <article class="entry">
+          <h3><a class="title-link" href="https://aleias.itch.io/boris-the-bartender" target="_blank" rel="noopener">Boris The Bartender</a></h3>
+          <p>Boris, a Russian criminal, was arrested in 1999 in Bombay for selling illegal substances and being involved in several murders. He was sentenced to 10 years in prison and caught with a cell phone. After serving his sentence, he received a call from an unknown number inviting him to work as a bartender at a bar near Juhu Beach. He accepted the offer and met the boss, Moksh, a grumpy man with no tolerance for mistakes.</p>
+          <div class="embed"><iframe src="https://itch.io/embed/3203677?dark=true" title="Boris The Bartender on itch.io"><a href="https://aleias.itch.io/boris-the-bartender">Boris The Bartender by Aleias</a></iframe></div>
+        </article>
+
+        <article class="entry">
+          <h3><a class="title-link" href="https://aleias.itch.io/loop-speedway" target="_blank" rel="noopener">Loop Speedway</a></h3>
+          <p>This is a game in which you have to constantly dodge obstacles coming towards you and survive to build a score so that you can show it off. The Twist being that the world is shrinking constantly making it harder for you to survive.</p>
+          <div class="embed"><iframe src="https://itch.io/embed/2240021?dark=true" title="Loop Speedway on itch.io"><a href="https://aleias.itch.io/loop-speedway">Loop Speedway by Aleias</a></iframe></div>
+        </article>
+
+        <!-- Copy an <article> block to add more games -->
+      </div>
+    </section>
+
+    <!-- GAME DESIGN DOCS -->
+    <section id="docs">
+      <h2>Game Design Docs</h2>
+      <div class="entries">
+
+        <article class="entry">
+          <h3>Ship of Theseus</h3>
+          <p>A lone laborer arrives at a half built ship at midnight with one job: replace the broken planks. The work is simple, repetitive and grounding until it isn't. As exhaustion sets in, the ship begins to betray the sense, and what started as a mundane night shift becomes something quietly, deeply wrong.</p>
+          <a class="btn" href="docs/Ship of Theseus.pdf" download>Download PDF</a>
+        </article>
+
+        <article class="entry">
+          <h3>Design Doc Title Two</h3>
+          <p>One-line description of the document.</p>
+          <a class="btn" href="docs/design.pdf" download>Download PDF</a>
+        </article>
+
+        <!-- Copy an <article> block to add more docs -->
+      </div>
+    </section>
+
+    <!-- MUSIC -->
+    <section id="music">
+      <h2>Music</h2>
+      <div class="entries">
+
+        <article class="entry">
+          <h3>Love You</h3>
+          <audio controls preload="metadata" src="music/Loveyou.mp3"></audio>
+          <a class="sc-link" href="https://soundcloud.com/samarth-ale/love-you-3" target="_blank" rel="noopener">Listen on SoundCloud ↗</a>
+        </article>
+
+        <article class="entry">
+          <h3>We Knew</h3>
+          <audio controls preload="metadata" src="music/we knew (Khary Jackson).mp3"></audio>
+          <a class="sc-link" href="https://soundcloud.com/samarth-ale/we-knew-2" target="_blank" rel="noopener">Listen on SoundCloud ↗</a>
+        </article>
+
+        <article class="entry">
+          <h3>Hallelujah</h3>
+          <audio controls preload="metadata" src="music/hallelujah.mp3"></audio>
+          <a class="sc-link" href="https://soundcloud.com/samarth-ale/hallelujah-1" target="_blank" rel="noopener">Listen on SoundCloud ↗</a>
+        </article>
+
+        <article class="entry">
+          <h3>Dill Out (UKG mix)</h3>
+          <audio controls preload="metadata" src="music/DilloutUKGMIX.wav"></audio>
+          <span class="sc-soon">Not yet on SoundCloud</span>
+        </article>
+
+        <!-- Copy an <article> block to add more tracks -->
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
