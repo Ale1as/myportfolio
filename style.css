@@ -327,7 +327,53 @@ audio { width: 100%; max-width: 552px; }
   .key { width: 40px; height: 40px; }
   .content { padding-bottom: 84px; }   /* so the bar never covers content */
 }
+/* ---------- WELCOME TOUR ---------- */
+.tour { position: fixed; inset: 0; z-index: 100; }
+.tour[hidden] { display: none; }
 
+/* the dim layer is the spotlight's giant shadow, so the button stays bright */
+.tour-spot {
+  position: absolute; border: 0; cursor: pointer;
+  border-radius: 16px; background: transparent;
+  box-shadow: 0 0 0 9999px rgba(43, 22, 35, .78);
+  transition: left .3s, top .3s, width .3s, height .3s;
+}
+.tour-spot::after {                     /* pulsing pointer ring */
+  content: ""; position: absolute; inset: -4px;
+  border: 3px solid var(--page-bg); border-radius: 20px;
+  animation: tourPulse 1.6s ease-out infinite;
+}
+@keyframes tourPulse {
+  0%   { transform: scale(1);    opacity: 1; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+.tour-tip {
+  position: absolute;
+  width: min(320px, calc(100vw - 24px));
+  background: var(--card-bg); color: var(--text);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .35);
+  animation: rise .5s cubic-bezier(.2,.7,.2,1) backwards;
+}
+.tour-tip::before {                     /* arrow */
+  content: ""; position: absolute; width: 14px; height: 14px;
+  background: var(--card-bg); transform: rotate(45deg);
+}
+.tour-tip.side::before  { left: -7px; bottom: 22px; }
+.tour-tip.above::before { bottom: -7px; left: var(--ax, 50%); }
+
+.tour-tip h3 { font-size: 1.3rem; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+.tour-tip p  { color: var(--muted); font-size: .95rem; margin-bottom: 16px; }
+.tour-actions { display: flex; align-items: center; gap: 14px; }
+.tour-no {
+  background: none; border: 0; cursor: pointer;
+  color: var(--muted); font: inherit; font-size: .92rem;
+  padding: 8px 4px; border-radius: 8px;
+}
+.tour-no:hover { color: var(--accent-dark); text-decoration: underline; }
+.tour-no:focus-visible, .tour-spot:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }

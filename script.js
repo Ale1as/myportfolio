@@ -194,3 +194,70 @@ document.querySelectorAll('.sidebar a, .btn, .links a').forEach(el => {
   applyVolume();
   select(0);
 })();
+
+// ---------- Welcome tour: spotlight the play button, ask visitors to start the music ----------
+(function () {
+  const tour = document.getElementById('tour');
+  const spot = document.getElementById('tourSpot');
+  const tip  = document.getElementById('tourTip');
+  const playBtn = document.getElementById('pPlay');
+  if (!tour || !playBtn) return;
+
+  const KEY = 'portfolio-tour-seen';
+  try { if (sessionStorage.getItem(KEY)) return; } catch (e) {}
+
+  function place() {
+    const r = playBtn.getBoundingClientRect();
+    const pad = 6;
+    spot.style.left   = (r.left - pad) + 'px';
+    spot.style.top    = (r.top - pad) + 'px';
+    spot.style.width  = (r.width + pad * 2) + 'px';
+    spot.style.height = (r.height + pad * 2) + 'px';
+
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+
+    if (window.innerWidth > 800) {            // desktop: tooltip to the right of the sidebar player
+      tip.className = 'tour-tip side';
+      tip.style.left = (r.right + pad + 20) + 'px';
+      tip.style.top  = Math.max(12, cy + 29 - th) + 'px';
+    } else {                                  // phone: tooltip above the bottom bar
+      tip.className = 'tour-tip above';
+      const left = Math.min(Math.max(12, cx - tw / 2), window.innerWidth - tw - 12);
+      tip.style.left = left + 'px';
+      tip.style.top  = Math.max(12, r.top - pad - 18 - th) + 'px';
+      tip.style.setProperty('--ax', (cx - left - 7) + 'px');
+    }
+  }
+
+  function close() {
+    tour.hidden = true;
+    document.body.style.overflow = '';
+    window.removeEventListener('resize', place);
+    document.removeEventListener('keydown', onKey);
+    try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+  }
+
+  function startMusic() {
+    playBtn.click();      // uses the real player, so everything stays in sync
+    close();
+  }
+
+  function onKey(e) { if (e.key === 'Escape') close(); }
+
+  document.getElementById('tourYes').addEventListener('click', startMusic);
+  spot.addEventListener('click', startMusic);
+  document.getElementById('tourNo').addEventListener('click', close);
+
+  // If music starts any other way, the tour has done its job
+  document.querySelectorAll('audio').forEach(a => a.addEventListener('play', () => { if (!tour.hidden) close(); }));
+
+  setTimeout(() => {
+    tour.hidden = false;
+    document.body.style.overflow = 'hidden';
+    place();
+    window.addEventListener('resize', place);
+    document.addEventListener('keydown', onKey);
+    document.getElementById('tourYes').focus();
+  }, 900);   // lets the intro animation finish first
+})();
